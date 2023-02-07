@@ -52,7 +52,7 @@ public class Banner extends RelativeLayout {
 
     private float startX, startY, lastX, lastY;
     private final int scaledTouchSlop;
-    //超过多少个才自动轮播(循环) 默认1
+    //超过多少个才循环 默认1
     private int overCountLoop = 1;
 
     public Banner(Context context) {
@@ -495,7 +495,7 @@ public class Banner extends RelativeLayout {
     }
 
     /**
-     * 是否自动轮播 大于等于autoPlayCount页轮播才生效
+     * 是否自动轮播 大于overCountLoop页轮播才生效
      */
     public Banner setAutoPlay(boolean autoPlay, int overCountLoop) {
         isAutoPlay = autoPlay;
