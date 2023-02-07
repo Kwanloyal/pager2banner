@@ -52,6 +52,8 @@ public class Banner extends RelativeLayout {
 
     private float startX, startY, lastX, lastY;
     private final int scaledTouchSlop;
+    //超过多少个才自动轮播(循环) 默认1
+    private int overCountLoop = 1;
 
     public Banner(Context context) {
         this(context, null);
@@ -132,9 +134,11 @@ public class Banner extends RelativeLayout {
     };
 
     private int toRealPosition(int position) {
-        int realPosition = 0;
-        if (getRealCount() > 1) {
+        int realPosition;
+        if (getRealCount() > overCountLoop) {
             realPosition = (position - sidePage) % getRealCount();
+        } else {
+            realPosition = position;
         }
         if (realPosition < 0) {
             realPosition += getRealCount();
@@ -198,7 +202,7 @@ public class Banner extends RelativeLayout {
 
         @Override
         public void onPageSelected(int position) {
-            if (getRealCount() > 1) {
+            if (getRealCount() > overCountLoop) {
                 tempPosition = position;
             }
             if (isBeginPagerChange) {
@@ -256,7 +260,7 @@ public class Banner extends RelativeLayout {
 
         @Override
         public int getItemCount() {
-            return getRealCount() > 1 ? getRealCount() + needPage : getRealCount();
+            return getRealCount() > overCountLoop ? getRealCount() + needPage : getRealCount();
         }
 
         @Override
@@ -286,7 +290,7 @@ public class Banner extends RelativeLayout {
 
         @Override
         public final void onItemRangeInserted(int positionStart, int itemCount) {
-            if (positionStart > 1) onChanged();
+            if (positionStart > overCountLoop) onChanged();
         }
 
         @Override
@@ -484,14 +488,26 @@ public class Banner extends RelativeLayout {
      */
     public Banner setAutoPlay(boolean autoPlay) {
         isAutoPlay = autoPlay;
-        if (isAutoPlay && getRealCount() > 1) {
+        if (isAutoPlay && getRealCount() > overCountLoop) {
+            startTurning();
+        }
+        return this;
+    }
+
+    /**
+     * 是否自动轮播 大于等于autoPlayCount页轮播才生效
+     */
+    public Banner setAutoPlay(boolean autoPlay, int overCountLoop) {
+        isAutoPlay = autoPlay;
+        this.overCountLoop = overCountLoop;
+        if (isAutoPlay && getRealCount() > overCountLoop) {
             startTurning();
         }
         return this;
     }
 
     public boolean isAutoPlay() {
-        return isAutoPlay && getRealCount() > 1;
+        return isAutoPlay && getRealCount() > overCountLoop;
     }
 
     public Banner setIndicator(Indicator indicator) {
@@ -536,7 +552,11 @@ public class Banner extends RelativeLayout {
     }
 
     public void setCurrentItem(int position, boolean smoothScroll) {
-        tempPosition = position + sidePage;
+        if (getRealCount() > overCountLoop) {
+            tempPosition = position + sidePage;
+        } else {
+            tempPosition = position;
+        }
         viewPager2.setCurrentItem(tempPosition, smoothScroll);
     }
 

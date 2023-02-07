@@ -45,16 +45,18 @@ public class MultPager2BannerActivity extends AppCompatActivity {
 
     private void initBanner1() {
         Banner banner = findViewById(R.id.banner1);
-        banner.setIndicator(new IndicatorView(this)
+        banner.setAutoPlay(false, 2)
+                .setIndicator(new IndicatorView(this)
                 .setIndicatorColor(Color.GRAY)
                 .setIndicatorSelectorColor(Color.WHITE))
-                .setPageMargin(UIUtil.dip2px(this, 20), UIUtil.dip2px(this, 10))
+                .setPageMargin(UIUtil.dip2px(this, 80), UIUtil.dip2px(this, 10))
                 .setOuterPageChangeListener(new ViewPager2.OnPageChangeCallback() {
                     @Override
                     public void onPageSelected(int position) {
-
+                        Log.e("aa", "initBanner1 onPageSelected " + position);
                     }
                 })
+//                .setAdapter(new ImageAdapter(Utils.getImage(3)));
                 .setAdapter(new ImageAdapter(Utils.getImage(2)));
     }
 
